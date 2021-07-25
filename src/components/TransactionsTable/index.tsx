@@ -1,45 +1,39 @@
+
+import { useTransactions } from "../../hooks/useTransaction";
 import { Container } from "./styles";
 
-export function TransactionsTable() {
-    return (
-        <Container>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Titulo</th>
-                        <th>Valor</th>
-                        <th>Categoria</th>
-                        <th>Data</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    <tr>
-                        <td>Desenvolvimento de WebSite</td>
-                        <td className="deposit">R$ 1200,00</td>
-                        <td>Desenvolvimento</td>
-                        <td>20/02/2021</td>
-                    </tr>
-                    <tr>
-                        <td>Desenvolvimento de WebSite</td>
-                        <td className="withdraw">- R$ 1200,00</td>
-                        <td>Desenvolvimento</td>
-                        <td>20/02/2021</td>
-                    </tr>
-                    <tr>
-                        <td>Desenvolvimento de WebSite</td>
-                        <td className="deposit">R$ 1200,00</td>
-                        <td>Desenvolvimento</td>
-                        <td>20/02/2021</td>
-                    </tr>
-                    <tr>
-                        <td>Desenvolvimento de WebSite</td>
-                        <td className="withdraw">- R$ 1200,00</td>
-                        <td>Desenvolvimento</td>
-                        <td>20/02/2021</td>
-                    </tr>
-                </tbody>
-            </table>
-        </Container>
-    )
+export function TransactionsTable() {
+  const {transactions} = useTransactions()
+  
+  return (
+    <Container>
+      <table>
+        <thead>
+          <tr>
+            <th>Titulo</th>
+            <th>Valor</th>
+            <th>Categoria</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {transactions.map((transaction) => (
+            <tr key={transaction.id}>
+              <td>{transaction.title}</td>
+              <td className={`${transaction.type}`}>
+                {new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(transaction.amount)}
+              </td>
+              <td>{transaction.category}</td>
+              <td>{new Date(transaction.createdAt).toLocaleDateString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </Container>
+  );
 }
